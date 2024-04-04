@@ -1,0 +1,39 @@
+﻿@page "/todo"
+@rendermode InteractiveServer
+
+<PageTitle>Todo</PageTitle>
+<h1>Todo</h1>
+
+<ul>
+    @foreach (var todo in todos.OrderBy(t => t.DueDate))
+    {
+        <li>
+            <div style="color: @(todo.DueDate < DateTime.Now.AddHours(1) ? "red" : "black")">
+                <p>Kirjeldus: @todo.Description</p>
+                <p>Sisestamise Aeg: @todo.CreatedDate</p>
+                <p>Lahendamise Aeg: @todo.DueDate</p>
+                <button @onclick="() => todos.Remove(todo)">Remove</button>
+            </div>
+        </li>
+    }
+</ul>
+
+<input placeholder="Something todo" @bind="newTodoDescription" />
+<input type="datetime-local" @bind="newTodoDueDate" />
+<button @onclick="AddTodo">Add todo</button>
+
+@code {
+    @using TodoApp
+    private List<TodoItem> todos = new();
+    private string? newTodoDescription;
+    private DateTime? newTodoDueDate;
+
+    private void AddTodo()
+    {
+        if (!string.IsNullOrWhiteSpace(newTodoDescription))
+        {
+            todos.Add(new TodoItem { Description = newTodoDescription, CreatedDate = DateTime.Now, DueDate = newTodoDueDate});
+            newTodoDescription = string.Empty;
+        }
+    }
+}
