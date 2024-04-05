@@ -4,23 +4,23 @@
 <PageTitle>Todo</PageTitle>
 <h1>Todo</h1>
 
+<input placeholder="Sisesta kirjeldus" @bind="newTodoDescription" />
+<input type="datetime-local" @bind="newTodoDueDate" />
+<button @onclick="AddTodo">Lisa</button>
+
 <ul>
     @foreach (var todo in todos.OrderBy(t => t.DueDate))
     {
-        <li>
+        <li id='list-item' class="card shadow">
             <div style="color: @(todo.DueDate < DateTime.Now.AddHours(1) ? "red" : "black")">
-                <p>Kirjeldus: @todo.Description</p>
-                <p>Sisestamise Aeg: @todo.CreatedDate</p>
-                <p>Lahendamise Aeg: @todo.DueDate</p>
-                <button @onclick="() => todos.Remove(todo)">Remove</button>
+                <h3>@todo.Description</h3>
+                <h4>Lahendamise Aeg: @todo.DueDate</h4>
+                <button id='btn' @onclick="() => todos.Remove(todo)">Eemalda</button>
+                <h6>Sisestamise Aeg: @todo.CreatedDate</h6>
             </div>
         </li>
     }
 </ul>
-
-<input placeholder="Something todo" @bind="newTodoDescription" />
-<input type="datetime-local" @bind="newTodoDueDate" />
-<button @onclick="AddTodo">Add todo</button>
 
 @code {
     @using TodoApp
@@ -30,7 +30,7 @@
 
     private void AddTodo()
     {
-        if (!string.IsNullOrWhiteSpace(newTodoDescription))
+        if (!string.IsNullOrWhiteSpace(newTodoDescription) && newTodoDueDate.HasValue)
         {
             todos.Add(new TodoItem { Description = newTodoDescription, CreatedDate = DateTime.Now, DueDate = newTodoDueDate});
             newTodoDescription = string.Empty;
