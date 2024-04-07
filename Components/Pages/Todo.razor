@@ -9,7 +9,7 @@
 <button @onclick="AddTodo">Lisa</button>
 
 <ul>
-    @foreach (var todo in todos.OrderBy(t => t.DueDate))
+    @foreach (var todo in todos.OrderByDescending(t => t.DueDate))
     {
         <li id='list-item' class="card shadow">
             <div style="color: @(todo.DueDate < DateTime.Now.AddHours(1) ? "red" : "black")">
